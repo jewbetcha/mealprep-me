@@ -39,10 +39,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-radio-group>
       <label for="">What is your goal?</label>
       <div class="">
-        <paper-radio-group selected="maintain">
-          <paper-radio-button name="maintain">Maintain weight</paper-radio-button>
-          <paper-radio-button name="lose">Lose weight</paper-radio-button>
-          <paper-radio-button name="gain">Gain weight</paper-radio-button>
+        <paper-radio-group selected="{{goal}}" id="goal">
+          <paper-radio-button value="maintain" name="maintain">Maintain weight</paper-radio-button>
+          <paper-radio-button value="lose" name="lose">Lose weight</paper-radio-button>
+          <paper-radio-button value="gain" name="gain">Gain weight</paper-radio-button>
         </paper-radio-group>
       </div>
 
@@ -55,6 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- <h4>Weekly budget - {{budget}}</h4>
       <h4>Days planned to prep - {{days}}</h4> -->
       <h4>Cost of meals per day - {{_costPerMeal(budget, meals)}}</h4>
+      <h4>Recommended calories per day - {{_dailyCalories(weight, goal)}}</h4>
     </div>
   </template>
   <script>
@@ -79,12 +80,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           observer: "_costPerMeal"
         },
         weight: {
-          type: Number
+          type: Number,
+          observer: "_dailyCalories"
+        },
+        goal: {
+          type: String,
+          observer: "_dailyCalories"
         }
       },
       _costPerMeal: function(budget, meals) {
         var avg = budget / meals;
         return "$" + avg;
+      },
+      _dailyCalories: function(weight, goal) {
+        var result;
+        switch(goal) {
+          case "lose":
+            result = weight * 10;
+            break;
+          case "maintain":
+            result = weight * 13;
+            break;
+          case "gain":
+            result = weight * 18;
+            break;
+        }
+        return result;
       },
       change: function() {
         console.log('changed');
