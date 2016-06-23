@@ -73,6 +73,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p>
         Here are some suggestions on food combinations, based on your caloric needs and a ratio of 50% carbs, 25% fat and 25% protein.
       </p>
+      <h5>(Per meal)</h5>
+      <h4>Carb based calories: {{calCarbs}}</h4>
+      <h4>Fat based calories: {{calFat}}</h4>
+      <h4>Protein based calories: {{calProten}}</h4>
     </paper-material>
     <paper-toast id="toast" text="Oops! You don't have enough money per day, try a different combination."></paper-toast>
   </template>
@@ -114,6 +118,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         calPerMeal: {
           type: Number,
           computed: '_calPerMeal(dailyCal, meals)'
+        },
+        calCarbs: {
+          type: Number,
+          computed: '_half(calPerMeal)'
+        },
+        calFat: {
+          type: Number,
+          computed: '_fourth(calPerMeal)'
+        },
+        calProten: {
+          type: Number,
+          computed: '_fourth(calPerMeal)'
         }
       },
       _isVeg: function(veg) {
@@ -158,10 +174,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _calPerMeal: function(dailyCal, meals) {
         return Math.round(dailyCal / 3);
       },
-      change: function() {
-        console.log('changed');
+      _half: function(c) {
+        return Math.round(c / 2);
+      },
+      _fourth: function(c) {
+        return Math.round(c / 4);
       }
-
     });
 
 
