@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             $
           </div>
         </paper-input>
-        <paper-input label="Number of meals you want to prep for:" placeholder="0" id="budget-input" value="{{meals::input}}">
+        <paper-input label="Number of meals per day you want to prep for:" placeholder="0" id="budget-input" value="{{meals::input}}">
         </paper-input>
         <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
         </paper-input>
@@ -65,13 +65,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h4>Days planned to prep - {{days}}</h4> -->
         <h4>Cost per meal: {{costPerMeal}}</h4>
         <h4>Recommended calories per day: {{dailyCal}}</h4>
-        <h4>Calories per meal: {{calPerMeal}}</h4>
+        <h4>Calories per meal (based on 3 meals a day): {{calPerMeal}}</h4>
       </div>
     </paper-material>
     <paper-material>
       <h3 class="headline">Mealprep suggestions</h3>
       <p>
-        Here are some suggestions on food combinations, based on your caloric needs.
+        Here are some suggestions on food combinations, based on your caloric needs and a ratio of 50% carbs, 25% fat and 25% protein..
       </p>
     </paper-material>
   </template>
@@ -129,7 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(v);
       },
       _costPerMeal: function(budget, meals) {
-        var avg = (budget / meals).toFixed(2);
+        var avg = ((budget / meals)/ 7).toFixed(2);
         return "$" + avg;
       },
       _dailyCalories: function(weight, goal) {
@@ -148,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return dailyCal;
       },
       _calPerMeal: function(dailyCal, meals) {
-        return Math.round(dailyCal / meals);
+        return Math.round(dailyCal / 3);
       },
       change: function() {
         console.log('changed');
