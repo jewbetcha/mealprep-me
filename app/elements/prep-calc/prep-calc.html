@@ -1,0 +1,98 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="prep-calc">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-radio-group {
+        display: block;
+      }
+    </style>
+    <!-- <div>Hello from <span>{{foo}}</span></div> -->
+    <h2>Let's create your healthy mealprep for the week.</h2>
+    <form is="iron-form">
+      <paper-input label="Your weekly budget:" placeholder="0.00" id="budget-input" value="{{budget::input}}">
+        <div prefix>
+          $
+        </div>
+      </paper-input>
+      <paper-input label="Number of meals you want to prep for:" placeholder="0" id="budget-input" value="{{meals::input}}">
+      </paper-input>
+      <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
+      </paper-input>
+      <label for="">Are you vegitarian?</label>
+      <paper-radio-group selected="no">
+        <paper-radio-button name="no">No</paper-radio-button>
+        <paper-radio-button name="yes">Yes</paper-radio-button>
+      </paper-radio-group>
+      <label for="">What is your goal?</label>
+      <div class="">
+        <paper-radio-group selected="maintain">
+          <paper-radio-button name="maintain">Maintain weight</paper-radio-button>
+          <paper-radio-button name="lose">Lose weight</paper-radio-button>
+          <paper-radio-button name="gain">Gain weight</paper-radio-button>
+        </paper-radio-group>
+      </div>
+
+
+      <!-- <paper-button raised onclick="">Calculate!</paper-button> -->
+    </form>
+
+    <div class="results">
+      <h3>Your results are: </h3>
+      <!-- <h4>Weekly budget - {{budget}}</h4>
+      <h4>Days planned to prep - {{days}}</h4> -->
+      <h4>Cost of meals per day - {{_costPerMeal(budget, meals)}}</h4>
+    </div>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'prep-calc',
+
+      properties: {
+        foo: {
+          type: String,
+          value: 'prep-calc',
+          notify: true
+        },
+        budget: {
+          type: String,
+          observer: "_costPerMeal"
+        },
+        meals: {
+          type: Number,
+          observer: "_costPerMeal"
+        },
+        weight: {
+          type: Number
+        }
+      },
+      _costPerMeal: function(budget, meals) {
+        var avg = budget / meals;
+        return "$" + avg;
+      },
+      change: function() {
+        console.log('changed');
+      }
+
+    });
+
+
+  })();
+  </script>
+</dom-module>
