@@ -32,7 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-input>
       <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
       </paper-input>
-      <label for="">Are you vegitarian?</label>
+      <label for="">Are you a vegitarian?</label>
       <paper-radio-group selected="{{veg}}">
         <paper-radio-button value="false" name="no">No</paper-radio-button>
         <paper-radio-button value="true" name="yes">Yes</paper-radio-button>
@@ -56,6 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h4>Days planned to prep - {{days}}</h4> -->
       <h4>Cost of meals per day - {{_costPerMeal(budget, meals)}}</h4>
       <h4>Recommended calories per day - {{_dailyCalories(weight, goal)}}</h4>
+      <h4>Calories per meal - {{calPerMeal}}</h4>
     </div>
   </template>
   <script>
@@ -63,15 +64,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     'use strict';
 
     var v;
+    //var dailyCal;
     Polymer({
       is: 'prep-calc',
 
       properties: {
-        foo: {
-          type: String,
-          value: 'prep-calc',
-          notify: true
-        },
         budget: {
           type: String,
           observer: "_costPerMeal"
@@ -92,6 +89,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           value: false,
           observer: "_isVeg"
+        },
+        dailyCal: {
+          type: Number,
+          computed: '_dailyCalories(weight, goal)'
+        },
+        calPerMeal: {
+          type: Number,
+          computed: '_calPerMeal(dailyCal, meals)'
         }
       },
       _isVeg: function(veg) {
@@ -112,19 +117,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return "$" + avg;
       },
       _dailyCalories: function(weight, goal) {
-        var result;
+        var dailyCal;
         switch(goal) {
           case "lose":
-            result = weight * 10;
+            dailyCal = weight * 10;
             break;
           case "maintain":
-            result = weight * 13;
+            dailyCal = weight * 13;
             break;
           case "gain":
-            result = weight * 18;
+            dailyCal = weight * 18;
             break;
         }
-        return result;
+        return dailyCal;
+      },
+      _calPerMeal: function(dailyCal, meals) {
+        return dailyCal / meals;
       },
       change: function() {
         console.log('changed');
