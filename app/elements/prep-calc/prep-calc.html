@@ -54,8 +54,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h3>Your results are: </h3>
       <!-- <h4>Weekly budget - {{budget}}</h4>
       <h4>Days planned to prep - {{days}}</h4> -->
-      <h4>Cost of meals per day - {{_costPerMeal(budget, meals)}}</h4>
-      <h4>Recommended calories per day - {{_dailyCalories(weight, goal)}}</h4>
+      <h4>Cost of meals per day - {{costPerMeal}}</h4>
+      <h4>Recommended calories per day - {{dailyCal}}</h4>
       <h4>Calories per meal - {{calPerMeal}}</h4>
     </div>
   </template>
@@ -70,20 +70,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         budget: {
-          type: String,
-          observer: "_costPerMeal"
+          type: Number
         },
         meals: {
+          type: Number
+        },
+        costPerMeal: {
           type: Number,
-          observer: "_costPerMeal"
+          computed: '_costPerMeal(budget, meals)'
         },
         weight: {
-          type: Number,
-          observer: "_dailyCalories"
+          type: Number
         },
         goal: {
-          type: String,
-          observer: "_dailyCalories"
+          type: String
         },
         veg: {
           type: Boolean,
