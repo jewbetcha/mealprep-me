@@ -33,15 +33,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
       </paper-input>
       <label for="">Are you vegitarian?</label>
-      <paper-radio-group selected="no">
-        <paper-radio-button name="no">No</paper-radio-button>
-        <paper-radio-button name="yes">Yes</paper-radio-button>
+      <paper-radio-group selected="{{veg}}">
+        <paper-radio-button value="false" name="no">No</paper-radio-button>
+        <paper-radio-button value="true" name="yes">Yes</paper-radio-button>
       </paper-radio-group>
       <label for="">What is your goal?</label>
       <div class="">
         <paper-radio-group selected="{{goal}}" id="goal">
-          <paper-radio-button value="maintain" name="maintain">Maintain weight</paper-radio-button>
           <paper-radio-button value="lose" name="lose">Lose weight</paper-radio-button>
+          <paper-radio-button value="maintain" name="maintain">Maintain weight</paper-radio-button>
           <paper-radio-button value="gain" name="gain">Gain weight</paper-radio-button>
         </paper-radio-group>
       </div>
@@ -62,6 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   (function() {
     'use strict';
 
+    var v;
     Polymer({
       is: 'prep-calc',
 
@@ -86,7 +87,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         goal: {
           type: String,
           observer: "_dailyCalories"
+        },
+        veg: {
+          type: Boolean,
+          value: false,
+          observer: "_isVeg"
         }
+      },
+      _isVeg: function(veg) {
+        switch (veg) {
+          case "no":
+            v = false;
+            break;
+          case "yes":
+            v = true;
+            break;
+          default:
+
+        }
+        console.log(v);
       },
       _costPerMeal: function(budget, meals) {
         var avg = budget / meals;
