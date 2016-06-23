@@ -19,45 +19,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-radio-group {
         display: block;
       }
+      paper-material {
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+      .headline {
+        text-decoration: underline;
+      }
     </style>
     <!-- <div>Hello from <span>{{foo}}</span></div> -->
-    <h2>Let's create your healthy mealprep for the week.</h2>
-    <form is="iron-form">
-      <paper-input label="Your weekly budget:" placeholder="0.00" id="budget-input" value="{{budget::input}}">
-        <div prefix>
-          $
-        </div>
-      </paper-input>
-      <paper-input label="Number of meals you want to prep for:" placeholder="0" id="budget-input" value="{{meals::input}}">
-      </paper-input>
-      <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
-      </paper-input>
-      <label for="">Are you a vegitarian?</label>
-      <paper-radio-group selected="{{veg}}">
-        <paper-radio-button value="false" name="no">No</paper-radio-button>
-        <paper-radio-button value="true" name="yes">Yes</paper-radio-button>
-      </paper-radio-group>
-      <label for="">What is your goal?</label>
-      <div class="">
-        <paper-radio-group selected="{{goal}}" id="goal">
-          <paper-radio-button value="lose" name="lose">Lose weight</paper-radio-button>
-          <paper-radio-button value="maintain" name="maintain">Maintain weight</paper-radio-button>
-          <paper-radio-button value="gain" name="gain">Gain weight</paper-radio-button>
+    <paper-material>
+    <h2>Let's create your mealprep plan for the week.</h2>
+      <form is="iron-form">
+        <paper-input label="Your weekly budget:" placeholder="0.00" id="budget-input" value="{{budget::input}}">
+          <div prefix>
+            $
+          </div>
+        </paper-input>
+        <paper-input label="Number of meals you want to prep for:" placeholder="0" id="budget-input" value="{{meals::input}}">
+        </paper-input>
+        <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
+        </paper-input>
+        <label for="">Are you a vegitarian?</label>
+        <paper-radio-group selected="{{veg}}">
+          <paper-radio-button value="false" name="no">No</paper-radio-button>
+          <paper-radio-button value="true" name="yes">Yes</paper-radio-button>
         </paper-radio-group>
+        <label for="">What is your goal?</label>
+        <div class="">
+          <paper-radio-group selected="{{goal}}" id="goal">
+            <paper-radio-button value="lose" name="lose">Lose weight</paper-radio-button>
+            <paper-radio-button value="maintain" name="maintain">Maintain weight</paper-radio-button>
+            <paper-radio-button value="gain" name="gain">Gain weight</paper-radio-button>
+          </paper-radio-group>
+        </div>
+
+
+        <!-- <paper-button raised onclick="">Calculate!</paper-button> -->
+      </form>
+    </paper-material>
+    <paper-material>
+      <div class="results">
+        <h3 class="headline">Results</h3>
+        <!-- <h4>Weekly budget - {{budget}}</h4>
+        <h4>Days planned to prep - {{days}}</h4> -->
+        <h4>Cost per meal: {{costPerMeal}}</h4>
+        <h4>Recommended calories per day: {{dailyCal}}</h4>
+        <h4>Calories per meal: {{calPerMeal}}</h4>
       </div>
-
-
-      <!-- <paper-button raised onclick="">Calculate!</paper-button> -->
-    </form>
-
-    <div class="results">
-      <h3>Your results are: </h3>
-      <!-- <h4>Weekly budget - {{budget}}</h4>
-      <h4>Days planned to prep - {{days}}</h4> -->
-      <h4>Cost of meals per day - {{costPerMeal}}</h4>
-      <h4>Recommended calories per day - {{dailyCal}}</h4>
-      <h4>Calories per meal - {{calPerMeal}}</h4>
-    </div>
+    </paper-material>
+    <paper-material>
+      <h3 class="headline">Mealprep suggestions</h3>
+      <p>
+        Here are some suggestions on food combinations, based on your caloric needs.
+      </p>
+    </paper-material>
   </template>
   <script>
   (function() {
