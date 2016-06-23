@@ -31,12 +31,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-material>
     <h2>Let's create your mealprep plan for the week.</h2>
       <form is="iron-form">
-        <paper-input label="Your weekly budget:" placeholder="0.00" id="budget-input" value="{{budget::input}}">
+        <paper-input label="Your weekly mealprep budget:" placeholder="0.00" id="budget-input" value="{{budget::input}}">
           <div prefix>
             $
           </div>
         </paper-input>
-        <paper-input label="Number of meals per day you want to prep for:" placeholder="0" id="budget-input" value="{{meals::input}}">
+        <paper-input label="Number of meals per day you want to prep for (based on 7 days):" placeholder="0" id="budget-input" value="{{meals::input}}">
         </paper-input>
         <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
         </paper-input>
@@ -71,9 +71,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-material>
       <h3 class="headline">Mealprep suggestions</h3>
       <p>
-        Here are some suggestions on food combinations, based on your caloric needs and a ratio of 50% carbs, 25% fat and 25% protein..
+        Here are some suggestions on food combinations, based on your caloric needs and a ratio of 50% carbs, 25% fat and 25% protein.
       </p>
     </paper-material>
+    <paper-toast id="toast" text="Oops! You don't have enough money per day, try a different combination."></paper-toast>
   </template>
   <script>
   (function() {
@@ -129,8 +130,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(v);
       },
       _costPerMeal: function(budget, meals) {
-        var avg = ((budget / meals)/ 7).toFixed(2);
-        return "$" + avg;
+        var avg = 0;
+        avg = ((budget / meals)/ 7).toFixed(2);
+        if (avg > 2) {
+          return "$" + avg;
+        }
+        else {
+          this.$.toast.open();
+          return "$0";
+        }
       },
       _dailyCalories: function(weight, goal) {
         var dailyCal;
