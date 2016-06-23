@@ -21912,76 +21912,166 @@ module.exports = Array.isArray || function (arr) {
       paper-radio-group {
         display: block;
       }
+      paper-material {
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+      .headline {
+        text-decoration: underline;
+      }
     </style>
     
-    <h2>Let's create your healthy mealprep for the week.</h2>
-    <form is="iron-form">
-      <paper-input label="Your weekly budget:" placeholder="0.00" id="budget-input" value="{{budget::input}}">
-        <div prefix="">
-          $
-        </div>
-      </paper-input>
-      <paper-input label="Number of meals you want to prep for:" placeholder="0" id="budget-input" value="{{meals::input}}">
-      </paper-input>
-      <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
-      </paper-input>
-      <label for="">Are you vegitarian?</label>
-      <paper-radio-group selected="no">
-        <paper-radio-button name="no">No</paper-radio-button>
-        <paper-radio-button name="yes">Yes</paper-radio-button>
-      </paper-radio-group>
-      <label for="">What is your goal?</label>
-      <div class="">
-        <paper-radio-group selected="maintain">
-          <paper-radio-button name="maintain">Maintain weight</paper-radio-button>
-          <paper-radio-button name="lose">Lose weight</paper-radio-button>
-          <paper-radio-button name="gain">Gain weight</paper-radio-button>
+    <paper-material>
+    <h2>Let's create your mealprep plan for the week.</h2>
+      <form is="iron-form">
+        <paper-input label="Your weekly mealprep budget:" placeholder="0.00" id="budget-input" value="{{budget::input}}">
+          <div prefix="">
+            $
+          </div>
+        </paper-input>
+        <paper-input label="Number of meals per day you want to prep for (based on 7 days):" placeholder="0" id="budget-input" value="{{meals::input}}">
+        </paper-input>
+        <paper-input label="Your weight (lbs):" placeholder="0" id="budget-input" value="{{weight::input}}">
+        </paper-input>
+        <label for="">Are you a vegitarian?</label>
+        <paper-radio-group selected="{{veg}}">
+          <paper-radio-button value="false" name="no">No</paper-radio-button>
+          <paper-radio-button value="true" name="yes">Yes</paper-radio-button>
         </paper-radio-group>
+        <label for="">What is your goal?</label>
+        <div class="">
+          <paper-radio-group selected="{{goal}}" id="goal">
+            <paper-radio-button value="lose" name="lose">Lose weight</paper-radio-button>
+            <paper-radio-button value="maintain" name="maintain">Maintain weight</paper-radio-button>
+            <paper-radio-button value="gain" name="gain">Gain weight</paper-radio-button>
+          </paper-radio-group>
+        </div>
+
+
+        
+      </form>
+    </paper-material>
+    <paper-material>
+      <div class="results">
+        <h3 class="headline">Results</h3>
+        
+        <h4>Cost per meal: {{costPerMeal}}</h4>
+        <h4>Recommended calories per day: {{dailyCal}}</h4>
+        <h4>Calories per meal (based on 3 meals a day): {{calPerMeal}}</h4>
       </div>
-
-
-      
-    </form>
-
-    <div class="results">
-      <h3>Your results are: </h3>
-      
-      <h4>Cost of meals per day - {{_costPerMeal(budget, meals)}}</h4>
-    </div>
+    </paper-material>
+    <paper-material>
+      <h3 class="headline">Mealprep suggestions</h3>
+      <p>
+        Here are some suggestions on food combinations, based on your caloric needs and a ratio of 50% carbs, 25% fat and 25% protein.
+      </p>
+      <h5>(Per meal)</h5>
+      <h4>Carb based calories: {{calCarbs}}</h4>
+      <h4>Fat based calories: {{calFat}}</h4>
+      <h4>Protein based calories: {{calProten}}</h4>
+    </paper-material>
+    <paper-toast id="toast" text="Oops! You don't have enough money per day, try a different combination."></paper-toast>
   </template>
   <script>
   (function() {
     'use strict';
 
+    var v;
+    //var dailyCal;
     Polymer({
       is: 'prep-calc',
 
       properties: {
-        foo: {
-          type: String,
-          value: 'prep-calc',
-          notify: true
-        },
         budget: {
-          type: String,
-          observer: "_costPerMeal"
+          type: Number
         },
         meals: {
+          type: Number
+        },
+        costPerMeal: {
           type: Number,
-          observer: "_costPerMeal"
+          computed: '_costPerMeal(budget, meals)'
         },
         weight: {
           type: Number
+        },
+        goal: {
+          type: String
+        },
+        veg: {
+          type: Boolean,
+          value: false,
+          observer: "_isVeg"
+        },
+        dailyCal: {
+          type: Number,
+          computed: '_dailyCalories(weight, goal)'
+        },
+        calPerMeal: {
+          type: Number,
+          computed: '_calPerMeal(dailyCal, meals)'
+        },
+        calCarbs: {
+          type: Number,
+          computed: '_half(calPerMeal)'
+        },
+        calFat: {
+          type: Number,
+          computed: '_fourth(calPerMeal)'
+        },
+        calProten: {
+          type: Number,
+          computed: '_fourth(calPerMeal)'
         }
       },
-      _costPerMeal: function(budget, meals) {
-        var avg = budget / meals;
-        return "$" + avg;
-      },
-      change: function() {
-        console.log('changed');
-      }
+      _isVeg: function(veg) {
+        switch (veg) {
+          case "no":
+            v = false;
+            break;
+          case "yes":
+            v = true;
+            break;
+          default:
 
+        }
+        console.log(v);
+      },
+      _costPerMeal: function(budget, meals) {
+        var avg = 0;
+        avg = ((budget / meals)/ 7).toFixed(2);
+        if (avg > 2) {
+          return "$" + avg;
+        }
+        else {
+          this.$.toast.open();
+          return "$0";
+        }
+      },
+      _dailyCalories: function(weight, goal) {
+        var dailyCal;
+        switch(goal) {
+          case "lose":
+            dailyCal = weight * 10;
+            break;
+          case "maintain":
+            dailyCal = weight * 13;
+            break;
+          case "gain":
+            dailyCal = weight * 18;
+            break;
+        }
+        return dailyCal;
+      },
+      _calPerMeal: function(dailyCal, meals) {
+        return Math.round(dailyCal / 3);
+      },
+      _half: function(c) {
+        return Math.round(c / 2);
+      },
+      _fourth: function(c) {
+        return Math.round(c / 4);
+      }
     });
 
 
