@@ -87,6 +87,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Nutritional Facts</span>
           </a>
 
+          <a data-route="dashboard" href="{{baseUrl}}dashboard">
+            <iron-icon icon="timeline"></iron-icon>
+            <span>Stocks Dashboard</span>
+          </a>
+
           <a data-route="contact" href="{{baseUrl}}contact">
             <iron-icon icon="mail"></iron-icon>
             <span>Contact</span>
@@ -129,6 +134,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="test" tabindex="-1">
               <paper-material>
                 <nutritional-facts></nutritional-facts>
+              </paper-material>
+            </section>
+
+            <section data-route="dashboard" tabindex="-1">
+              <paper-material>
+                <stocks-list></stocks-list>
+                something
               </paper-material>
             </section>
 
