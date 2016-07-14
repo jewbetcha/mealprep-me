@@ -17,7 +17,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
     </style>
-    <div>Hello from <span>{{foo}}</span></div>
+    <iron-ajax
+        auto
+        url="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20IN%20(%22YHOO%22,%22AAPL%22)&format=json&env=http://datatables.org/alltables.env"
+        handle-as="json"
+        last-response="{{data}}"
+        on-response="handleResponse"
+        debounce-duration="300"></iron-ajax>
+    <!-- <iron-list items="[[data]]" as="stock"> -->
+      <template is="dom-repeat" items="{{data.items}}">
+        <div class="">
+          [[item]]
+        </div>
+      </template>
+    <!-- </iron-list> -->
+
   </template>
   <script>
   (function() {
@@ -25,13 +39,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
       is: 'stocks-list',
-
       properties: {
-        foo: {
-          type: String,
-          value: 'stocks-list',
-          notify: true
+        data: {
+          type: Array,
+          value: function() {
+            return [];
+          }
         }
+      },
+      handleResponse: function() {
+        console.log("data");
       }
     });
   })();
